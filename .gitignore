@@ -1,0 +1,7 @@
+__pycache__
+.vscode
+.git
+.venv
+*.mpg
+*.mp4
+/stuff
