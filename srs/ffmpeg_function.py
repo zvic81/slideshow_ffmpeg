@@ -8,7 +8,7 @@
 # https://i.pinimg.com/originals/f3/e9/ee/f3e9eeddfe1cc62853167b7183cc324a.png
 
 import ffmpeg
-import sys
+# import sys
 import os
 from time import sleep
 from pathlib import Path

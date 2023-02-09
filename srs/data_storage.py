@@ -1,6 +1,7 @@
 # functions and  storage for list objects (local database)
-from entities import Slide, PictureSource
-import schemas
+from entities import Slide
+
+# import schemas
 
 
 Video_List = []  # General list contains objects of Slide

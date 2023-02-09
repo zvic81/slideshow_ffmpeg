@@ -7,7 +7,7 @@ class Slide:
         self.pics_list = []
         self._uid = uuid.uuid4().hex  # unique ID of object slideshow
         self.video_url = ""  # url to file made video
-        self.status = "empty"
+        self.status = "EMPTY"
 
     def __str__(self):
         return f"*{self._uid}\n*{self.video_url}\n*{self.status}\n*{[print(i) for i in self.pics_list]}*\n\n"

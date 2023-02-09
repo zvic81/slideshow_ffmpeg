@@ -1,8 +1,57 @@
 # Schemas for Marschmellow for validation and serialization data from endpoints to list of objects in memory
 from apiflask import Schema, fields
 from apiflask.validators import Range
-from marshmallow import post_load
+from marshmallow import post_load, validate
 from entities import PictureSource
+
+FadeEffectTuple = (  # allowed effects for XFADE mmfpeg
+    "fade",
+    "wipeleft",
+    "wiperight",
+    "wipeup",
+    "wipedown",
+    "slideleft",
+    "slideright",
+    "slideup",
+    "slidedown",
+    "circlecrop",
+    "rectcrop",
+    "distance",
+    "fadeblack",
+    "fadewhite",
+    "radial",
+    "smoothleft",
+    "smoothright",
+    "smoothup",
+    "smoothdown",
+    "circleopen",
+    "circleclose",
+    "vertopen",
+    "vertclose",
+    "horzopen",
+    "horzclose",
+    "dissolve",
+    "pixelize",
+    "diagtl",
+    "diagtr",
+    "diagbl",
+    "diagbr",
+    "hlslice",
+    "hrslice",
+    "vuslice",
+    "vdslice",
+    "hblur",
+    "fadegrays",
+    "wipetl",
+    "wipetr",
+    "wipebl",
+    "wipebr",
+    "squeezeh",
+    "squeezev",
+    "zoomin",
+    "fadefast",
+    "fadeslow",
+)
 
 
 class BaseResponse(Schema):
@@ -11,7 +60,10 @@ class BaseResponse(Schema):
 
 
 class VideoOutSchema(Schema):
-    _uid = fields.String()
+    _uid = fields.String(
+        required=True,
+        metadata={"example": "f9b615925f044095b6e1ebbcb518dc35"},
+    )
     video_url = fields.String()
     status = fields.String()
 
@@ -25,7 +77,11 @@ class PictureSourceSchema(Schema):
     duration = fields.Integer(
         required=True, validate=Range(min=1, max=59), metadata={"example": 5}
     )
-    transition = fields.String(required=True, metadata={"example": "fade"})
+    transition = fields.String(
+        required=True,
+        validate=validate.OneOf(FadeEffectTuple),
+        metadata={"example": "fade"},
+    )
     caption = fields.String(metadata={"example": "SuperShow"})
 
     @post_load
@@ -35,6 +91,7 @@ class PictureSourceSchema(Schema):
 
 class VideoId(Schema):
     id = fields.String(required=True, metadata={"example": "xxd123123fsdf42342342"})
+
 
 class VideoStatus(Schema):
     status = fields.String(required=True, metadata={"example": "READY"})

@@ -2,6 +2,7 @@
 Slideshow_ffmpeg - REST API server, receiving list of json data as {pics_URL, duration, transition, caption} and building video file using ffmpeg.
 Film is slideshow from pictures with effects transition (xfade)
 User get video ID back and sending it to endpoints can get status video (making, ready) and the finished video (using curl)
+# to download video <curl --location --request GET "http://localhost:5000/video/fdba0bcf62f14b6eb266aa03cf0b038b" --output testvideo.mpg >
 """
 from apiflask import APIFlask
 
@@ -20,7 +21,6 @@ app.config["BASE_RESPONSE_DATA_KEY "] = "data"
 
 
 if __name__ == "__main__":
-
     app.run(debug=0, host="127.0.0.1")
     pass
 
@@ -29,19 +29,19 @@ if __name__ == "__main__":
 [
   {
     "caption": "SuperShow",
-    "duration": 15,
+    "duration": 3,
     "srs": "pics.com\\11/001.png",
     "transition": "fade"
   },
   {
     "caption": "SuperShow",
-    "duration": 20,
+    "duration": 2,
     "srs": "pics.com\\11/020.png",
     "transition": "fade"
   },  
  {
     "caption": "SuperShow",
-    "duration": 10,
+    "duration": 4,
     "srs": "pics.com\\11/050.png",
     "transition": "fade"
   }
