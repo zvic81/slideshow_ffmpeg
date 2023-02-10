@@ -1,0 +1,8 @@
+2023-02-10 15:16:41,084 :: app :: 46 :: INFO :: Logger was initialitation
+2023-02-10 15:16:41,084 :: app.main :: 53 :: INFO :: app started!!!
+2023-02-10 15:16:57,619 :: app.main.ffmpeg :: 63 :: INFO :: start ffmpeg
+2023-02-10 15:16:57,622 :: app.main.ffmpeg :: 41 :: INFO :: load_and_resize_picture for https://i.pinimg.com/originals/f3/e9/ee/f3e9eeddfe1cc62853167b7183cc324a.png
+2023-02-10 15:16:58,850 :: app.main.ffmpeg :: 41 :: INFO :: load_and_resize_picture for https://webmg.ru/wp-content/uploads/2022/10/i-17-15.jpeg
+2023-02-10 15:16:59,660 :: app.main.ffmpeg :: 112 :: INFO :: start making fade id = 68b458aac0914ee8b03f7d93966bbce1
+2023-02-10 15:17:02,420 :: app.main.ffmpeg :: 126 :: INFO :: Success making video id = 68b458aac0914ee8b03f7d93966bbce1
+2023-02-10 15:17:53,531 :: app.main.routes :: 87 :: INFO :: try to recieve video id = 68b458aac0914ee8b03f7d93966bbce1
