@@ -133,7 +133,7 @@ if __name__ == "__main__":
     append_test_video()
     print(Video_List[0])
     print("*" * 50)
-    print("******************START THREAD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    print("******************START THREAD!!!!!!!!!!!!!!!!!!")
     th = Thread(target=convert_pic_to_video, args=(Video_List[0],))
     th.start()
     # convert_pic_to_video(Video_List[0])
