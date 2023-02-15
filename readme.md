@@ -42,19 +42,19 @@ Example picture list:
   {
     "caption": "SuperShow",
     "duration": 3,
-    "srs": "pics.com\\11/001.png",
+    "srs": "https://webmg.ru/wp-content/uploads/2022/10/i-17-15.jpeg",
     "transition": "fade"
   },
   {
     "caption": "SuperShow",
     "duration": 2,
-    "srs": "pics.com\\11/020.png",
+    "srs": "https://i.pinimg.com/originals/f3/e9/ee/f3e9eeddfe1cc62853167b7183cc324a.png",
     "transition": "fade"
   },  
  {
     "caption": "SuperShow",
     "duration": 4,
-    "srs": "pics.com\\11/050.png",
+    "srs": "https://i.ytimg.com/vi/ULEprOna8-g/maxresdefault.jpg",
     "transition": "fade"
   }
 ]

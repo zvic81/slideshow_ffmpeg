@@ -7,7 +7,8 @@
 # https://webmg.ru/wp-content/uploads/2022/10/i-17-15.jpeg
 # https://i.pinimg.com/originals/f3/e9/ee/f3e9eeddfe1cc62853167b7183cc324a.png
 # https://flyclipart.com/thumbs/vector-illustration-of-stratford-upon-avon-tudor-style-stratford-upon-avon-cartoon-1477652.png
-# https://flyclipart.com/thumbs/vector-illustration-of-stratford-upon-avon-tudor-style-stratford-upon-avon-cartoon-1477652.png
+# https://anvizbiometric.ru/wp-content/uploads/8/7/f/87f5629a6808640e69d2a39a127a7ab3.jpeg
+# https://i.ytimg.com/vi/ULEprOna8-g/maxresdefault.jpg
 
 import ffmpeg
 import os
@@ -19,11 +20,26 @@ from entities import Slide
 from data_storage import Video_List, append_test_video
 
 PICS_DIR = "pics"
+BASE_RESOLUTION = (1280, 720)
 logger = logging.getLogger("app.main.ffmpeg")
 
-#  download and resize picture to make the same size before starting filter ffmpeg
+# return size picture
+def get_video_size(filename: str) -> tuple:
+    try:
+        logger.info("get_video_size for %s", filename)
+        probe = ffmpeg.probe(filename)
+        video_info = next(s for s in probe["streams"])  # if s["codec_type"] == "video")
+        width = int(video_info["width"])
+        height = int(video_info["height"])
+        return width, height
+    except ffmpeg.Error as e:
+        logger.error(e)
+        return 0
+
+
+#  download and resize picture to make the same size before starting filter ffmpeg. New picture's size is not larger one of (base_size_x,base_size_y)
 def load_and_resize_picture(
-    *, input_url: str, output_dir: str, x_size=960, y_size=720
+    *, input_url: str, output_dir: str, base_size_x=1280, base_size_y=720
 ) -> str:
     if len(input_url) and type(input_url) == str:
         file_out = input_url.split("/")[-1]  # take onli file name from url
@@ -39,17 +55,23 @@ def load_and_resize_picture(
     name += "_resize"
     # output_dir = "id111"  # REMOVE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     file_out = check_create_dir(output_dir) + "/" + name + ext
+    pic_x, pic_y = get_video_size(input_url)
+    scale = min(base_size_x / pic_x, base_size_y / pic_y)
+    pic_x = int((scale * pic_x) + 0.5)
+    pic_y = int((scale * pic_y) + 0.5)
     try:
         logger.info("load_and_resize_picture for %s", input_url)
         (  #  RECOMMENT FOR REAL USING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             ffmpeg.input(input_url)
-            .filter("scale", x_size, y_size)
+            .filter("scale", pic_x, pic_y)
             .output(file_out, y="-y")
             .run()
         )
     except ffmpeg.Error as e:
         logger.error(e)
         return 0
+    # start resize picture
+
     return file_out
 
 
@@ -91,7 +113,34 @@ def convert_pic_to_video(slide: Slide) -> str:
                     slide.status = "ERROR"
                     return 0
                 faded = ffmpeg.input(file1, t=previous_pic.duration + 1, loop=1)
+                # continue here
+                # faded = ffmpeg.filter((faded), "scale", size="320:135")
+                pad_x, pad_y = get_video_size(file1)
+                pad_x = (BASE_RESOLUTION[0] - pad_x) / 2
+                pad_y = (BASE_RESOLUTION[1] - pad_y) / 2
+                faded = ffmpeg.filter(
+                    (faded),
+                    "pad",
+                    str(BASE_RESOLUTION[0]),
+                    str(BASE_RESOLUTION[1]),
+                    str(pad_x),
+                    str(pad_y),
+                    "red",
+                )
             stream2 = ffmpeg.input(file2, t=curr_pic.duration + 1, loop=1)
+            pad_x, pad_y = get_video_size(file2)
+            pad_x = (BASE_RESOLUTION[0] - pad_x) / 2
+            pad_y = (BASE_RESOLUTION[1] - pad_y) / 2
+            stream2 = ffmpeg.filter(
+                (stream2),
+                "pad",
+                str(BASE_RESOLUTION[0]),
+                str(BASE_RESOLUTION[1]),
+                str(pad_x),
+                str(pad_y),
+                "red",
+            )
+
             sum_offset += previous_pic.duration
             try:
                 faded = ffmpeg.filter(
