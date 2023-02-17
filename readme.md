@@ -32,6 +32,11 @@ For Linux :
 $ git clone https://github.com/zvic81/slideshow_ffmpeg.git
 ```
 - 2) Run python3 app.py 
+  3) or use docker
+
+    docker build -t slide .
+    docker run  -p 5000:5000 slide
+
 ```
 - 3) Try open http://127.0.0.1:5000 for swagger gui app or use Postman
 

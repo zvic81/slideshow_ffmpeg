@@ -51,7 +51,7 @@ if __name__ == "__main__":
     init_logger("app")
     logger = logging.getLogger("app.main")
     logger.info("app started!!!")
-    app.run(debug=0, host="127.0.0.1")
+    app.run(debug=0, host="0.0.0.0")
     pass
 
 
