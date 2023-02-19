@@ -1,0 +1,7 @@
+rename class slide
+too short id video
+videolist not need / must map {id:status-> unknown, inprogress, ready error}
+ststus in response maust CONATANT_!!!_!!!
+File video not found, recreate it -> reutrn constant
+return 0 - no error, >0 codes of errors
+url for pictures not eque name.ext

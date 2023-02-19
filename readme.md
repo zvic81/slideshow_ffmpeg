@@ -8,7 +8,7 @@ For download video <curl --location --request GET "http://localhost:5000/video/f
 On default pics and video put in /pics/<video_id> where video_id is id each video
 
 Endpoints:
-    - Get("/video") - read all video is short format    
+    - Get("/video") - read all video is short format
     - Post("/video") - create video, need list of picture, format is bellow
     - Get("/status/video_id") - read status video (in progress, ready, error). Need video_id
     - Get("/video/video_id") - get file video, need video id, use curl or browser
@@ -18,11 +18,11 @@ Endpoints:
 ## Requirements
 
 - Python 3.7+
-- Flask  
-- apiflask 
+- Flask
+- apiflask
 - venv
 - ffmpeg
-- threading 
+- threading
 
 ## Installation
 
@@ -31,7 +31,7 @@ For Linux :
 ```bash
 $ git clone https://github.com/zvic81/slideshow_ffmpeg.git
 ```
-- 2) Run python3 app.py 
+- 2) Run python3 app.py
   3) or use docker
 
     docker build -t slide .
@@ -39,6 +39,13 @@ $ git clone https://github.com/zvic81/slideshow_ffmpeg.git
 
 ```
 - 3) Try open http://127.0.0.1:5000 for swagger gui app or use Postman
+
+Install venv:
+cd slideshow_ffmpeg
+source venv/bin/activate
+pip install -r requirements.txt
+
+python -m venv venv
 
 ## Format
 
@@ -55,7 +62,7 @@ Example picture list:
     "duration": 2,
     "srs": "https://i.pinimg.com/originals/f3/e9/ee/f3e9eeddfe1cc62853167b7183cc324a.png",
     "transition": "fade"
-  },  
+  },
  {
     "caption": "SuperShow",
     "duration": 4,
@@ -64,7 +71,7 @@ Example picture list:
   }
 ]
 
-Allowed duration from 1 to 59 (duration every clip from picture, time transition always 1 sec) 
+Allowed duration from 1 to 59 (duration every clip from picture, time transition always 1 sec)
 
 Caption is not used in creating video
 
@@ -72,5 +79,3 @@ Allowed effects for transition
 "fade", "wipeleft",    "wiperight",    "wipeup",    "wipedown",    "slideleft",    "slideright",    "slideup",    "slidedown",    "circlecrop",    "rectcrop",    "distance",
     "fadeblack",   "fadewhite",    "radial",    "smoothleft",    "smoothright",    "smoothup",    "smoothdown",    "circleopen",    "circleclose",    "vertopen",    "vertclose",
     "horzopen",    "horzclose",    "dissolve",    "pixelize",    "diagtl",    "diagtr",    "diagbl",    "diagbr",    "hlslice",    "hrslice",    "vuslice",    "vdslice",    "hblur",    "fadegrays",    "wipetl",    "wipetr",    "wipebl",    "wipebr",    "squeezeh",    "squeezev",    "zoomin",    "fadefast",    "fadeslow"
-
-
