@@ -7,7 +7,7 @@ import os
 from threading import Thread
 import logging
 import schemas
-from data_storage import append_test_video, Video_List, create_slide
+from data_storage import append_test_video, Video_List, create_video_object
 from ffmpeg_function import convert_pic_to_video
 
 
@@ -43,7 +43,7 @@ def configure_routes(app):
                 "data": {"id": "Number of images less 2"},
                 "code": 400,
             }, 400
-        new_slide = create_slide(status="NEW", video_url="None", picture_list=data)
+        new_slide = create_video_object(status="NEW", video_url="None", picture_list=data)
         Video_List.append(new_slide)
         response = new_slide.get_uid()
         # convert_pic_to_video(new_slide)

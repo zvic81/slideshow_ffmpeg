@@ -16,7 +16,7 @@ from time import sleep
 from pathlib import Path
 from threading import Thread
 import logging
-from entities import Slide
+from entities import VideoSource
 from data_storage import Video_List, append_test_video
 
 PICS_DIR = "pics"
@@ -82,35 +82,35 @@ def check_create_dir(dir_name: str) -> str:
     return dir_name
 
 
-#  convert list of pictures to video with xfade ffmpeg. Argument is objects of Slide. Return url video
-def convert_pic_to_video(slide: Slide) -> str:
+#  convert list of pictures to video with xfade ffmpeg. Argument is objects of video_source. Return url video
+def convert_pic_to_video(video_source: VideoSource) -> str:
     logger.info("start ffmpeg")
-    if type(slide) != Slide:
-        logging.error("convert_pic_to_video: type(slide) != Slide")
+    if type(video_source) != VideoSource:
+        logging.error("convert_pic_to_video: type(video_source) != video_source")
         return 0
-    slide.status = "IN_PROGRESS"
-    if len(slide.pics_list) < 2:
-        slide.status = "ERROR"
-        logging.error("convert_pic_to_video: len(slide.pics_list) < 2")
-        return 0  # must be 2 or more pictures in slide, else cant make transition
+    video_source.status = "IN_PROGRESS"
+    if len(video_source.pics_list) < 2:
+        video_source.status = "ERROR"
+        logging.error("convert_pic_to_video: len(video_source.pics_list) < 2")
+        return 0  # must be 2 or more pictures in video_source, else cant make transition
     sum_offset = 0
     previous_pic = None
-    for curr_pic in slide.pics_list:
+    for curr_pic in video_source.pics_list:
         if previous_pic:  # pass first object in list
             file2 = load_and_resize_picture(
-                input_url=curr_pic.srs, output_dir=slide.get_uid()
+                input_url=curr_pic.srs, output_dir=video_source.get_uid()
             )
             if not file2:
                 logger.error("error load_and_resize_picture(file2)")
-                slide.status = "ERROR"
+                video_source.status = "ERROR"
                 return 0
             if not sum_offset:  # only for 2 round of cycle
                 file1 = load_and_resize_picture(
-                    input_url=previous_pic.srs, output_dir=slide.get_uid()
+                    input_url=previous_pic.srs, output_dir=video_source.get_uid()
                 )
                 if not file1:
                     logger.error("error load_and_resize_picture(file1)")
-                    slide.status = "ERROR"
+                    video_source.status = "ERROR"
                     return 0
                 faded = ffmpeg.input(file1, t=previous_pic.duration + 1, loop=1)
                 # continue here
@@ -158,43 +158,30 @@ def convert_pic_to_video(slide: Slide) -> str:
         pass
 
     # file_video = PICS_DIR + "/" + "id111" + "/video_out.mpg" FOR TEST local
-    file_video = PICS_DIR + "/" + slide.get_uid() + "/video_out.mpg"
+    file_video = PICS_DIR + "/" + video_source.get_uid() + "/video_out.mpg"
     try:
-        logger.info("start making fade id = %s", slide.get_uid())
+        logger.info("start making fade id = %s", video_source.get_uid())
         out = (
             ffmpeg.output(faded, file_video, y="-y")
             .global_args("-loglevel", "error")
             .run(capture_stdout=True, capture_stderr=True)
         )
     except ffmpeg.Error as exc:
-        logger.error("Error in making fade %s", slide.get_uid())
+        logger.error("Error in making fade %s", video_source.get_uid())
         logger.error(exc.stderr.decode("utf8"))
         logger.error(exc.stdout.decode("utf8"))
-        slide.status = "ERROR"
+        video_source.status = "ERROR"
         return 0
-    slide.video_url = file_video
-    slide.status = "READY"
-    logger.info("Success making video id = %s", slide.get_uid())
+    video_source.video_url = file_video
+    video_source.status = "READY"
+    logger.info("Success making video id = %s", video_source.get_uid())
     return 1
 
 
 if __name__ == "__main__":
-    ifile = "https://webmg.ru/wp-content/uploads/2022/10/i-17-15.jpeg"
-    # print(load_and_resize_picture(input_url=ifile, output_dir="i12344321"))
-    append_test_video()
-    print(Video_List[0])
-    print("*" * 50)
-    print("******************START THREAD!!!!!!!!!!!!!!!!!!")
-    th = Thread(target=convert_pic_to_video, args=(Video_List[0],))
-    th.start()
-    # convert_pic_to_video(Video_List[0])
-    while th.is_alive():
-        print("-----******-------")
-        print(Video_List[0].status)
-        sleep(0.1)
-    print(Video_List[0])
+    pass
 
-
+  
 # (
 #     ffmpeg.input("pics/logo.png")
 #     .filter("scale", 360, 640)

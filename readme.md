@@ -42,10 +42,10 @@ $ git clone https://github.com/zvic81/slideshow_ffmpeg.git
 
 Install venv:
 cd slideshow_ffmpeg
+python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-
-python -m venv venv
+  python -m venv venv
 
 ## Format
 

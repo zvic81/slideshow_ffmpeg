@@ -2,10 +2,10 @@
 import uuid
 
 
-class Slide:
+class VideoSource:
     def __init__(self):
         self.pics_list = []
-        self._uid = uuid.uuid4().hex  # unique ID of object slideshow
+        self._uid = uuid.uuid4().hex+uuid.uuid4().hex+uuid.uuid4().hex+uuid.uuid4().hex  # unique ID of object slideshow
         self.video_url = ""  # url to file made video
         self.status = "EMPTY"
 

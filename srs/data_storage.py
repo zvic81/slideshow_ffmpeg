@@ -1,5 +1,5 @@
 # functions and  storage for list objects (local database)
-from entities import Slide
+from entities import VideoSource
 
 # import schemas
 
@@ -28,18 +28,18 @@ test_list = [
 ]
 
 
-def create_slide(*, status: str, video_url: str, picture_list: list) -> Slide:
-    slide = Slide()
+def create_video_object(*, status: str, video_url: str, picture_list: list) -> VideoSource:
+    video_source = VideoSource()
     # slide.pics_list =  schemas.PictureSourceSchema(many=True).load(picture_list)  ************Decomment for load from local dict
-    slide.pics_list = picture_list.copy()
-    slide.status = status
-    slide.video_url = video_url
-    return slide
+    video_source.pics_list = picture_list.copy()
+    video_source.status = status
+    video_source.video_url = video_url
+    return video_source
 
 
 #  add test object to VideoList from test_list
 def append_test_video(status="NEW", video_url="/home/python/vid.mp4"):
-    z = create_slide(status=status, video_url=video_url, picture_list=test_list)
+    z = create_video_object(status=status, video_url=video_url, picture_list=test_list)
     Video_List.append(z)
 
 
