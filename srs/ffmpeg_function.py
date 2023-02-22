@@ -12,29 +12,30 @@
 
 import ffmpeg
 import os
-from time import sleep
 from pathlib import Path
+from time import sleep
+
 from threading import Thread
 import logging
 from entities import VideoSource
-from data_storage import Video_List, append_test_video
+from data_storage import Video_Dict, append_test_video
 
-PICS_DIR = "pics"
+
 BASE_RESOLUTION = (1280, 720)
 logger = logging.getLogger("app.main.ffmpeg")
 
-# return size picture
+
 def get_video_size(filename: str) -> tuple:
     try:
         logger.info("get_video_size for %s", filename)
         probe = ffmpeg.probe(filename)
-        video_info = next(s for s in probe["streams"])  # if s["codec_type"] == "video")
+        video_info = next(s for s in probe["streams"])
         width = int(video_info["width"])
         height = int(video_info["height"])
         return width, height
     except ffmpeg.Error as e:
         logger.error(e)
-        return 0
+        return 1
 
 
 #  download and resize picture to make the same size before starting filter ffmpeg. New picture's size is not larger one of (base_size_x,base_size_y)
@@ -45,10 +46,10 @@ def load_and_resize_picture(
         file_out = input_url.split("/")[-1]  # take onli file name from url
     else:
         logger.error("len(input_url) and type(input_url) != str")
-        return 0
+        return 1
     if not file_out:
         logger.error("load_and_resize_picture: cant split(/)")
-        return 0
+        return 1
     name, ext = os.path.splitext(file_out)
     # logger.info("name %s, ext %s", name, ext)
 
@@ -61,7 +62,7 @@ def load_and_resize_picture(
     pic_y = int((scale * pic_y) + 0.5)
     try:
         logger.info("load_and_resize_picture for %s", input_url)
-        (  #  RECOMMENT FOR REAL USING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        (  # RECOMMENT FOR REAL USING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             ffmpeg.input(input_url)
             .filter("scale", pic_x, pic_y)
             .output(file_out, y="-y")
@@ -69,7 +70,7 @@ def load_and_resize_picture(
         )
     except ffmpeg.Error as e:
         logger.error(e)
-        return 0
+        return 1
     # start resize picture
 
     return file_out
@@ -77,22 +78,27 @@ def load_and_resize_picture(
 
 # check and create dir for saving picture before resize
 def check_create_dir(dir_name: str) -> str:
-    dir_name = PICS_DIR + "/" + dir_name
+    import data_storage
+    dir_name = str(data_storage.PICS_DIR) + '/' + dir_name
     Path(dir_name).mkdir(parents=True, exist_ok=True)
     return dir_name
 
 
-#  convert list of pictures to video with xfade ffmpeg. Argument is objects of video_source. Return url video
+#  convert list of pictures to video with xfade ffmpeg. Argument is objects of video_source. Return url video and add it to Video_Dict
 def convert_pic_to_video(video_source: VideoSource) -> str:
+    import data_storage
     logger.info("start ffmpeg")
     if type(video_source) != VideoSource:
-        logging.error("convert_pic_to_video: type(video_source) != video_source")
-        return 0
+        logging.error(
+            "convert_pic_to_video: type(video_source) != video_source")
+        return 1
     video_source.status = "IN_PROGRESS"
+    Video_Dict[video_source.get_uid()] = video_source.status
     if len(video_source.pics_list) < 2:
         video_source.status = "ERROR"
+        Video_Dict[video_source.get_uid()] = video_source.status
         logging.error("convert_pic_to_video: len(video_source.pics_list) < 2")
-        return 0  # must be 2 or more pictures in video_source, else cant make transition
+        return 1  # must be 2 or more pictures in video_source, else cant make transition
     sum_offset = 0
     previous_pic = None
     for curr_pic in video_source.pics_list:
@@ -103,7 +109,7 @@ def convert_pic_to_video(video_source: VideoSource) -> str:
             if not file2:
                 logger.error("error load_and_resize_picture(file2)")
                 video_source.status = "ERROR"
-                return 0
+                return 1
             if not sum_offset:  # only for 2 round of cycle
                 file1 = load_and_resize_picture(
                     input_url=previous_pic.srs, output_dir=video_source.get_uid()
@@ -111,8 +117,9 @@ def convert_pic_to_video(video_source: VideoSource) -> str:
                 if not file1:
                     logger.error("error load_and_resize_picture(file1)")
                     video_source.status = "ERROR"
-                    return 0
-                faded = ffmpeg.input(file1, t=previous_pic.duration + 1, loop=1)
+                    return 1
+                faded = ffmpeg.input(
+                    file1, t=previous_pic.duration + 1, loop=1)
                 # continue here
                 # faded = ffmpeg.filter((faded), "scale", size="320:135")
                 pad_x, pad_y = get_video_size(file1)
@@ -152,13 +159,14 @@ def convert_pic_to_video(video_source: VideoSource) -> str:
                 )
             except ffmpeg.Error as e:
                 logger.error(e)
-                return 0
+                return 1
             pass
         previous_pic = curr_pic
         pass
 
     # file_video = PICS_DIR + "/" + "id111" + "/video_out.mpg" FOR TEST local
-    file_video = PICS_DIR + "/" + video_source.get_uid() + "/video_out.mpg"
+    file_video = str(data_storage.PICS_DIR) + '/' + \
+        video_source.get_uid() + "/video_out.mpg"
     try:
         logger.info("start making fade id = %s", video_source.get_uid())
         out = (
@@ -171,17 +179,19 @@ def convert_pic_to_video(video_source: VideoSource) -> str:
         logger.error(exc.stderr.decode("utf8"))
         logger.error(exc.stdout.decode("utf8"))
         video_source.status = "ERROR"
-        return 0
+        Video_Dict[video_source.get_uid()] = video_source.status
+        return 1
     video_source.video_url = file_video
     video_source.status = "READY"
+    Video_Dict[video_source.get_uid()] = video_source.status
     logger.info("Success making video id = %s", video_source.get_uid())
-    return 1
+    return 0
 
 
 if __name__ == "__main__":
     pass
 
-  
+
 # (
 #     ffmpeg.input("pics/logo.png")
 #     .filter("scale", 360, 640)

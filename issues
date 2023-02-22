@@ -1,9 +1,10 @@
 *fix - rename class slide
 *fix - too short id video 
-videolist not need / must map {id:status-> unknown, inprogress, ready error}
-status in response must be CONATANT_!!!_!!!
-File video not found, recreate it -> reutrn constant
-return 0 - no error, >0 codes of errors
+*fix - videolist not need / must map {id:status-> unknown, inprogress, ready error}
+*fix - status in response must be CONATANT_!!!_!!!
+*fix - File video not found, recreate it -> reutrn constant
+*fix - return 0 - no error, >0 codes of errors
 url for pictures not eque name.ext
 Dont use swagger for tests, use Postman
+one picture is video too
  
