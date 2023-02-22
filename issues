@@ -4,7 +4,7 @@
 *fix - status in response must be CONATANT_!!!_!!!
 *fix - File video not found, recreate it -> reutrn constant
 *fix - return 0 - no error, >0 codes of errors
-url for pictures not eque name.ext
+*fix - url for pictures not eque name.ext
 Dont use swagger for tests, use Postman
 one picture is video too
  

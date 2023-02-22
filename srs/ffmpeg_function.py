@@ -39,24 +39,19 @@ def get_video_size(filename: str) -> tuple:
 
 
 #  download and resize picture to make the same size before starting filter ffmpeg. New picture's size is not larger one of (base_size_x,base_size_y)
-def load_and_resize_picture(
-    *, input_url: str, output_dir: str, base_size_x=1280, base_size_y=720
-) -> str:
-    if len(input_url) and type(input_url) == str:
-        file_out = input_url.split("/")[-1]  # take onli file name from url
-    else:
+def load_and_resize_picture(*, input_url: str, output_dir: str, base_size_x=1280, base_size_y=720, count_file_name: str) -> str:
+    if not len(input_url) or type(input_url) != str:
         logger.error("len(input_url) and type(input_url) != str")
         return 1
-    if not file_out:
-        logger.error("load_and_resize_picture: cant split(/)")
+    file_out = check_create_dir(output_dir) + "/" + \
+        str(count_file_name) + '.png'
+    try:
+        pic_x, pic_y = get_video_size(input_url)
+    except TypeError:
+        logger.error("get_video_size returns 1 arg, must 2, wrong URL!")
         return 1
-    name, ext = os.path.splitext(file_out)
-    # logger.info("name %s, ext %s", name, ext)
 
-    name += "_resize"
-    # output_dir = "id111"  # REMOVE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    file_out = check_create_dir(output_dir) + "/" + name + ext
-    pic_x, pic_y = get_video_size(input_url)
+    # MAKE checking errors!!!!!!!!!!!!!!!
     scale = min(base_size_x / pic_x, base_size_y / pic_y)
     pic_x = int((scale * pic_x) + 0.5)
     pic_y = int((scale * pic_y) + 0.5)
@@ -71,8 +66,6 @@ def load_and_resize_picture(
     except ffmpeg.Error as e:
         logger.error(e)
         return 1
-    # start resize picture
-
     return file_out
 
 
@@ -104,19 +97,21 @@ def convert_pic_to_video(video_source: VideoSource) -> str:
     for curr_pic in video_source.pics_list:
         if previous_pic:  # pass first object in list
             file2 = load_and_resize_picture(
-                input_url=curr_pic.srs, output_dir=video_source.get_uid()
+                input_url=curr_pic.srs, output_dir=video_source.get_uid(), count_file_name=sum_offset + 1
             )
-            if not file2:
+            if file2 == 1:
                 logger.error("error load_and_resize_picture(file2)")
                 video_source.status = "ERROR"
+                Video_Dict[video_source.get_uid()] = video_source.status
                 return 1
             if not sum_offset:  # only for 2 round of cycle
                 file1 = load_and_resize_picture(
-                    input_url=previous_pic.srs, output_dir=video_source.get_uid()
+                    input_url=previous_pic.srs, output_dir=video_source.get_uid(), count_file_name=sum_offset + 101
                 )
-                if not file1:
+                if file1 == 1:
                     logger.error("error load_and_resize_picture(file1)")
                     video_source.status = "ERROR"
+                    Video_Dict[video_source.get_uid()] = video_source.status
                     return 1
                 faded = ffmpeg.input(
                     file1, t=previous_pic.duration + 1, loop=1)
@@ -136,6 +131,7 @@ def convert_pic_to_video(video_source: VideoSource) -> str:
                 )
             stream2 = ffmpeg.input(file2, t=curr_pic.duration + 1, loop=1)
             pad_x, pad_y = get_video_size(file2)
+            # enter check error!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
             pad_x = (BASE_RESOLUTION[0] - pad_x) / 2
             pad_y = (BASE_RESOLUTION[1] - pad_y) / 2
             stream2 = ffmpeg.filter(
@@ -159,6 +155,7 @@ def convert_pic_to_video(video_source: VideoSource) -> str:
                 )
             except ffmpeg.Error as e:
                 logger.error(e)
+                Video_Dict[video_source.get_uid()] = "ERROR"
                 return 1
             pass
         previous_pic = curr_pic
