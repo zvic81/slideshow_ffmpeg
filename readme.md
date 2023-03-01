@@ -60,7 +60,7 @@ Example picture list:
   {
     "caption": "SuperShow",
     "duration": 2,
-    "srs": "https://i.pinimg.com/originals/f3/e9/ee/f3e9eeddfe1cc62853167b7183cc324a.png",
+    "srs": "https://rusolymp.ru/wp-content/uploads/2019/10/kak-vypolnit-otdelku-dachnogo-doma-vnutri-i-snaruzhi-62cd781.jpg",
     "transition": "fade"
   },
  {
