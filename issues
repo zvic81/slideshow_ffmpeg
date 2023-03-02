@@ -4,6 +4,6 @@
 *fix - status in response must be CONATANT_!!!_!!!
 *fix - return 0 - no error, >0 codes of errors
 *fix - url for pictures not eque name.ext
-Dont use swagger for tests, use Postman
+*fix - Dont use swagger for tests, use Postman
 one picture is video too
- 
+redirect to localhost/docs - error on GCP, need https://slide-new-33xyz3qt7a-lz.a.run.app/docs 
