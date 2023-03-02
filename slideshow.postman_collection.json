@@ -1,0 +1,100 @@
+{
+	"info": {
+		"_postman_id": "40b4a093-010b-46e9-8693-7ea30eb1349e",
+		"name": "slideshow",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "post video",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n  {\n    \"caption\": \"SuperShow\",\n    \"duration\": 3,\n    \"srs\": \"https://webmg.ru/wp-content/uploads/2022/10/i-17-15.jpeg\",\n    \"transition\": \"fade\"\n  },\n  {\n    \"caption\": \"SuperShow\",\n    \"duration\": 4,\n    \"srs\": \"https://i.pinimg.com/originals/f3/e9/ee/f3e9eeddfe1cc62853167b7183cc324a.png\",\n    \"transition\": \"fade\"\n  },  \n {\n    \"caption\": \"SuperShow\",\n    \"duration\": 4,\n    \"srs\": \"https://i.ytimg.com/vi/ULEprOna8-g/maxresdefault.jpg\",\n    \"transition\": \"fade\"\n  }\n]\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/video",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"video"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/status/be103f7a243e4951bf36c98ea9707530b364049576b841b4a0e8a64dbfe19e771a8c7d0e050541efa5d3e165578e5dbbd0e45ddcbe4a4307935ec770c692fa32",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"status",
+						"be103f7a243e4951bf36c98ea9707530b364049576b841b4a0e8a64dbfe19e771a8c7d0e050541efa5d3e165578e5dbbd0e45ddcbe4a4307935ec770c692fa32"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "3345",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get video",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/video/6f74154f56274b588d2fc021f7e9569d81194017044845ecb43615467678ba53bc4a125c74744ed4a79675340af801fd1f38e0b9316d472b9aec3ad3f272540e",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"video",
+						"6f74154f56274b588d2fc021f7e9569d81194017044845ecb43615467678ba53bc4a125c74744ed4a79675340af801fd1f38e0b9316d472b9aec3ad3f272540e"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "3345",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

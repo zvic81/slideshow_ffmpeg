@@ -1,0 +1,10 @@
+__pycache__
+.vscode
+.git
+.venv
+venv
+stuff
+pics
+*log.txt
+slideshow.postman_collection.json
+issues

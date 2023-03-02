@@ -5,15 +5,18 @@ User get video ID back and sending it to endpoints can get status video (making,
 # to download video <curl --location --request GET "http://localhost:5000/video/fdba0bcf62f14b6eb266aa03cf0b038b" --output testvideo.mpg >
 """
 from apiflask import APIFlask
+from pathlib import Path
+import os
 import logging
 import schemas
-from routes import configure_routes
+import routes
+import data_storage
 
 # import ffmpeg_function dont need
 
 
 app = APIFlask(__name__)
-configure_routes(app)
+routes.configure_routes(app)
 app.url_map.strict_slashes = False  # open /index/ as /index
 app.config["DESCRIPTION"] = "Slideshow - RestAPI server"
 app.config["BASE_RESPONSE_SCHEMA"] = schemas.BaseResponse
@@ -31,6 +34,8 @@ app.config["BASE_RESPONSE_DATA_KEY "] = "data"
 #     # filemode="w",
 #     format="%(asctime)s %(levelname)s %(message)s",
 # )
+
+
 def init_logger(name):
     logger = logging.getLogger(name)
     FORMAT = "%(asctime)s :: %(name)s :: %(lineno)s :: %(levelname)s :: %(message)s"
@@ -47,11 +52,19 @@ def init_logger(name):
     pass
 
 
+def init_dir():
+    app_dir = os.path.abspath(os.path.join(
+        os.path.dirname(__file__), ".."))
+    data_storage.PICS_DIR = Path(app_dir + data_storage.PICS_DIR)
+
+
 if __name__ == "__main__":
     init_logger("app")
+    init_dir()
+    print(data_storage.PICS_DIR)  # /home/vic/python/slideshow_ffmpeg/pics
     logger = logging.getLogger("app.main")
     logger.info("app started!!!")
-    app.run(debug=0, host="127.0.0.1")
+    app.run(debug=0, host="0.0.0.0")
     pass
 
 
@@ -60,20 +73,21 @@ if __name__ == "__main__":
   {
     "caption": "SuperShow",
     "duration": 3,
-    "srs": "pics.com\\11/001.png",
+    "srs": "https://webmg.ru/wp-content/uploads/2022/10/i-17-15.jpeg",
     "transition": "fade"
   },
   {
     "caption": "SuperShow",
     "duration": 2,
-    "srs": "pics.com\\11/020.png",
+    "srs": "https://i.pinimg.com/originals/f3/e9/ee/f3e9eeddfe1cc62853167b7183cc324a.png",
     "transition": "fade"
   },  
  {
     "caption": "SuperShow",
     "duration": 4,
-    "srs": "pics.com\\11/050.png",
+    "srs": "https://i.ytimg.com/vi/ULEprOna8-g/maxresdefault.jpg",
     "transition": "fade"
   }
 ]
+
 """

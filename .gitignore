@@ -2,6 +2,7 @@ __pycache__
 .vscode
 .git
 .venv
+venv
 *.mpg
 *.mp4
 /stuff
