@@ -15,6 +15,6 @@
    - '--image'
    - 'gcr.io/$PROJECT_ID/slide-ci-cd:$COMMIT_SHA'
    - '--region'
-   - 'europe-west1 '
+   - 'europe-west1'
  images:
  - 'gcr.io/$PROJECT_ID/slide-ci-cd:$COMMIT_SHA'
