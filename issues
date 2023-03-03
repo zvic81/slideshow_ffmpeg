@@ -7,4 +7,3 @@
 *fix - Dont use swagger for tests, use Postman
 one picture is video too
 redirect to localhost/docs - error on GCP, need https://slide-new-33xyz3qt7a-lz.a.run.app/docs 
-test
