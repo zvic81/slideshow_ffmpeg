@@ -14,9 +14,10 @@ import ffmpeg
 import os
 from pathlib import Path
 from time import sleep
-
 from threading import Thread
 import logging
+import gcp_functions
+
 from entities import VideoSource
 from data_storage import Video_Dict, append_test_video
 
@@ -183,6 +184,14 @@ def convert_pic_to_video(video_source: VideoSource) -> str:
     Video_Dict[video_source.get_uid()] = video_source.status
     logger.info("Success making video id = %s", video_source.get_uid())
     return 0
+
+
+# move dir to firebase (with deleting original dir)
+def move_to_firebase(directory_name: str):
+    if not os.path.isdir(directory_name):
+        return 1
+
+    pass
 
 
 if __name__ == "__main__":

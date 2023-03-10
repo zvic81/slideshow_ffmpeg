@@ -12,5 +12,5 @@ RUN python -m pip install -r requirements.txt
 EXPOSE 5000
 
 ENTRYPOINT ["python", "/app/srs/app.py"] 
-
+Visual Studio Code
 # CMD ["/app/srs/app.py"]
