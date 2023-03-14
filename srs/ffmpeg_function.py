@@ -16,8 +16,9 @@ from pathlib import Path
 from time import sleep
 from threading import Thread
 import logging
-import gcp_functions
+import shutil  # for delete dir
 
+import gcp_functions
 from entities import VideoSource
 from data_storage import Video_Dict, append_test_video
 
@@ -180,21 +181,43 @@ def convert_pic_to_video(video_source: VideoSource) -> str:
         Video_Dict[video_source.get_uid()] = video_source.status
         return 1
     video_source.video_url = file_video
+    if move_video_to_firebase(video_source.get_uid()):
+        logger.error("Error in moving video %s", video_source.get_uid())
+        return 1
+    logger.info("Success moving to firebase video id = %s",
+                video_source.get_uid())
     video_source.status = "READY"
     Video_Dict[video_source.get_uid()] = video_source.status
     logger.info("Success making video id = %s", video_source.get_uid())
     return 0
 
 
-# move dir to firebase (with deleting original dir)
-def move_to_firebase(directory_name: str):
-    if not os.path.isdir(directory_name):
+# move video from dir to firebase (with deleting original dir)
+def move_video_to_firebase(video_id: str):
+    import data_storage
+    
+    video_url = Path(str(data_storage.PICS_DIR) +
+                     '/' + video_id + "/video_out.mpg")
+    # Path(str(data_storage.PICS_DIR) + video_id + "/video_out.mpg")
+    if not video_url.is_file():
+        logger.error(
+            "Error in move_video_to_firebase, no video_out.mpg in dir %s", video_id)
         return 1
-
-    pass
+    gcp_functions.upload_blob(video_url, video_id + '.mpg')
+    logger.info('video %s upload to firebase', video_id + '.mpg')
+    try:
+        shutil.rmtree(Path(str(data_storage.PICS_DIR) + '/' + video_id))
+        logger.info('dir removed %s', video_id)
+    except OSError as e:
+        logger.error(
+            "Error in move_video_to_firebase, cant del dir %s", video_id)
+        return 1
+    return 0
 
 
 if __name__ == "__main__":
+    # move_video_to_firebase('')
+
     pass
 
 

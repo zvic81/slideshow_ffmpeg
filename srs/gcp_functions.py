@@ -59,6 +59,7 @@ def download_blob(source_blob_name: str, destination_file_name: str, bucket_name
     blob.download_to_filename(destination_file_name)
     logger.info('download_blob %s succesfull to %s',
                 source_blob_name, destination_file_name)
+    return 0
 
 
 dic = json.loads(access_secret_version(PROJECT_SECRET_ID, SECRET_NAME))
@@ -66,5 +67,5 @@ dic = json.loads(access_secret_version(PROJECT_SECRET_ID, SECRET_NAME))
 cred = credentials.Certificate(dic)
 initialize_app(cred, {'storageBucket': STORAGE_BUCKET_LONG})
 print(f'initialize_app succesfull for {STORAGE_BUCKET_LONG}')
-# upload_blob('issues', 'issues.txt')
-# download_blob('issues.txt', 'download_stuff')
+# upload_blob('cloudbuild.yaml', 'cloudbuild.yaml')
+# download_blob('cloudbuild.yaml', 'cloudbuild_download.yaml')

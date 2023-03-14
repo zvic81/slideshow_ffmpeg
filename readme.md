@@ -34,7 +34,7 @@ $ git clone https://github.com/zvic81/slideshow_ffmpeg.git
 - 2) Run python3 app.py
   3) or use docker
 
-    docker build -t slide .
+    docker build -t slide . --network=host
     docker run  -p 5000:5000 slide
 
 ```
