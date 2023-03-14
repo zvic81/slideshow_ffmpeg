@@ -1,20 +1,22 @@
- steps:
- # Build the container image
- - name: 'gcr.io/cloud-builders/docker'
-   args: ['build', '-t', 'gcr.io/$PROJECT_ID/slide-ci-cd:$COMMIT_SHA', '.']
- # Push the container image to Container Registry
- - name: 'gcr.io/cloud-builders/docker'
-   args: ['push', 'gcr.io/$PROJECT_ID/slide-ci-cd:$COMMIT_SHA']
- # Deploy container image to Cloud Run
- - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-   entrypoint: gcloud
-   args:
-   - 'run'
-   - 'deploy'
-   - 'slide-ci-cd'
-   - '--image'
-   - 'gcr.io/$PROJECT_ID/slide-ci-cd:$COMMIT_SHA'
-   - '--region'
-   - 'europe-west1'
- images:
- - 'gcr.io/$PROJECT_ID/slide-ci-cd:$COMMIT_SHA'
+steps:
+# Build the container image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/$PROJECT_ID/slide-ci-cd:$COMMIT_SHA', '.']
+options:
+  logging: CLOUD_LOGGING_ONLY
+# Push the container image to Container Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/$PROJECT_ID/slide-ci-cd:$COMMIT_SHA']
+# Deploy container image to Cloud Run
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args:
+  - 'run'
+  - 'deploy'
+  - 'slide-ci-cd'
+  - '--image'
+  - 'gcr.io/$PROJECT_ID/slide-ci-cd:$COMMIT_SHA'
+  - '--region'
+  - 'europe-west1'
+images:
+- 'gcr.io/$PROJECT_ID/slide-ci-cd:$COMMIT_SHA'
