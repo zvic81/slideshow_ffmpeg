@@ -1,3 +1,6 @@
-Flask==2.2.2
+Flask
 apiflask
 ffmpeg-python
+google-cloud-storage
+firebase-admin
+google-cloud-secret-manager

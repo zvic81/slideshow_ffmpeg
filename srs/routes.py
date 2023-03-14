@@ -7,8 +7,10 @@ import os
 from pathlib import Path
 from threading import Thread
 import logging
+import shutil
 import schemas
 from data_storage import Video_Dict, create_video_object
+import gcp_functions
 
 
 def configure_routes(app):
@@ -77,8 +79,13 @@ def configure_routes(app):
                 "data": status,
                 "code": 404,
             }, 404
-        video_url = Path(str(data_storage.PICS_DIR) +
-                         '/' + video_id + "/video_out.mpg")
+        # del and create dir PICS
+        shutil.rmtree(Path(str(data_storage.PICS_DIR)))
+        Path(str(data_storage.PICS_DIR)).mkdir(parents=True, exist_ok=True)
+
+        video_url = Path(str(data_storage.PICS_DIR) + '/' + video_id + '.mpg')
+        gcp_functions.download_blob(
+            video_id + '.mpg', video_url)
         if not video_url.is_file():
             logger.error("Video not found, id = %s", video_id)
             return {
@@ -87,7 +94,7 @@ def configure_routes(app):
             }, 404
         try:
             logger.info("try to give out video id = %s", video_id)
-            return send_from_directory(data_storage.PICS_DIR, video_id + "/video_out.mpg", as_attachment=False)
+            return send_from_directory(data_storage.PICS_DIR, video_id + '.mpg', as_attachment=False)
         except NotFound:
             logger.error("File video not found id = %s", video_id)
         return {
