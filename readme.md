@@ -1,7 +1,7 @@
 
 
 
-# Slideshow_ffmpeg
+# Slideshow_ffmpeg  **
 Slideshow_ffmpeg is a Python application, rest api server, which recieve list of url to picture and return ID new video. Video is slideshow sourced these pictures. Video can be downloaded whit get request (curl or browser)
 User get video ID back and sending it to endpoints can get status video (making, ready) and the finished video (using curl)
 For download video <curl --location --request GET "http://localhost:5000/video/fdba0bcf62f14b6eb266aa03cf0b038b" --output testvideo.mpg >
