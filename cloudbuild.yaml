@@ -16,5 +16,7 @@
    - 'gcr.io/$PROJECT_ID/slide-ci-cd:$COMMIT_SHA'
    - '--region'
    - 'europe-west1'
+   - '--port' 
+   - '5000'
  images:
  - 'gcr.io/$PROJECT_ID/slide-ci-cd:$COMMIT_SHA'
