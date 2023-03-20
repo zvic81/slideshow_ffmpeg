@@ -5,8 +5,8 @@ for acces my pc to secret manager:
 gcloud auth application-default login
 '''
 from firebase_admin import credentials, initialize_app, storage
-from google.cloud import secretmanager
-import google_crc32c
+# from google.cloud import secretmanager
+# import google_crc32c
 import json
 import logging
 from pathlib import Path
@@ -19,28 +19,28 @@ SECRET_NAME = 'secret-key-firebase'
 logger = logging.getLogger("app.main.gcp")
 
 
-def access_secret_version(project_id, secret_id, version_id='latest'):
-    """
-    Access the payload for the given secret version if one exists. The version
-    can be a version number as a string (e.g. "5") or an alias (e.g. "latest").
-    """
-    # Create the Secret Manager client.
-    client = secretmanager.SecretManagerServiceClient()
-    # Build the resource name of the secret version.
-    name = f"projects/{project_id}/secrets/{secret_id}/versions/{version_id}"
-    # Access the secret version.
-    response = client.access_secret_version(request={"name": name})
-    # Verify payload checksum.
-    crc32c = google_crc32c.Checksum()
-    crc32c.update(response.payload.data)
-    if response.payload.data_crc32c != int(crc32c.hexdigest(), 16):
-        print("func <access_secret_version>: Data corruption detected.")
-        return response
+# def access_secret_version(project_id, secret_id, version_id='latest'):
+#     """
+#     Access the payload for the given secret version if one exists. The version
+#     can be a version number as a string (e.g. "5") or an alias (e.g. "latest").
+#     """
+#     # Create the Secret Manager client.
+#     client = secretmanager.SecretManagerServiceClient()
+#     # Build the resource name of the secret version.
+#     name = f"projects/{project_id}/secrets/{secret_id}/versions/{version_id}"
+#     # Access the secret version.
+#     response = client.access_secret_version(request={"name": name})
+#     # Verify payload checksum.
+#     crc32c = google_crc32c.Checksum()
+#     crc32c.update(response.payload.data)
+#     if response.payload.data_crc32c != int(crc32c.hexdigest(), 16):
+#         print("func <access_secret_version>: Data corruption detected.")
+#         return response
 
-    payload = response.payload.data.decode("UTF-8")
-    # print("Plaintext: {}".format(payload))
-    print("<access_secret_version> successfull")
-    return payload
+#     payload = response.payload.data.decode("UTF-8")
+#     # print("Plaintext: {}".format(payload))
+#     print("<access_secret_version> successfull")
+#     return payload
 
 
 def upload_blob(source_file_name: str, destination_file_name: str, bucket_name=STORAGE_BUCKET_LONG):
@@ -62,13 +62,10 @@ def download_blob(source_blob_name: str, destination_file_name: str, bucket_name
     return 0
 
 
+print('\n\n')
 secret_locations = '/secrets/key_firebase'
 with open(secret_locations) as f:
-    SECRET = f.readlines()
-try:
-    print('SECRET READ ::: ', SECRET)
-except Exception as e:
-    print("ERROR ", e)
+    print(*f)
 
 
 # dic = json.loads(access_secret_version(PROJECT_SECRET_ID, SECRET_NAME))
@@ -76,5 +73,3 @@ except Exception as e:
 # cred = credentials.Certificate(dic)
 # initialize_app(cred, {'storageBucket': STORAGE_BUCKET_LONG})
 print(f'initialize_app succesfull for {STORAGE_BUCKET_LONG}')
-# upload_blob('cloudbuild.yaml', 'cloudbuild.yaml')
-# download_blob('cloudbuild.yaml', 'cloudbuild_download.yaml')
