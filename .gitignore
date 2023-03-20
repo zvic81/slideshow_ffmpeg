@@ -8,3 +8,5 @@ venv
 /stuff
 /pics
 *log.txt
+key
+/secrets
