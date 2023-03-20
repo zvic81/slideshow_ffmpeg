@@ -41,7 +41,7 @@ def init_logger(name):
     FORMAT = "%(asctime)s :: %(name)s :: %(lineno)s :: %(levelname)s :: %(message)s"
     logger.setLevel(logging.DEBUG)
     sh = logging.StreamHandler()
-    sh.setLevel(logging.INFO)
+    sh.setLevel(logging.DEBUG)
     sh.setFormatter(logging.Formatter(FORMAT))
     # fh = logging.FileHandler(filename="slideshow_log.txt", mode="w")
     # fh = logging.FileHandler(filename="slideshow_log.txt", mode="w")
