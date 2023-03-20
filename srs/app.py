@@ -43,11 +43,12 @@ def init_logger(name):
     sh = logging.StreamHandler()
     sh.setLevel(logging.INFO)
     sh.setFormatter(logging.Formatter(FORMAT))
-    fh = logging.FileHandler(filename="slideshow_log.txt", mode="w")
-    fh.setLevel(logging.INFO)
-    fh.setFormatter(logging.Formatter(FORMAT))
+    # fh = logging.FileHandler(filename="slideshow_log.txt", mode="w")
+    # fh = logging.FileHandler(filename="slideshow_log.txt", mode="w")
+    # fh.setLevel(logging.INFO)
+    # fh.setFormatter(logging.Formatter(FORMAT))
     logger.addHandler(sh)
-    logger.addHandler(fh)
+    # logger.addHandler(fh)
     logger.info("Logger was initialitation")
     pass
 
@@ -61,7 +62,7 @@ def init_dir():
 if __name__ == "__main__":
     init_logger("app")
     init_dir()
-    print(data_storage.PICS_DIR)  # /home/vic/python/slideshow_ffmpeg/pics
+    # print(data_storage.PICS_DIR)  # /home/vic/python/slideshow_ffmpeg/pics
     logger = logging.getLogger("app.main")
     logger.info("app started!!!")
     app.run(debug=0, host="0.0.0.0")

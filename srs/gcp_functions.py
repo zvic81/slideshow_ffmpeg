@@ -14,8 +14,8 @@ from pathlib import Path
 # bucket where stores private key
 STORAGE_BUCKET_LONG = 'test1-de41b.appspot.com'
 STORAGE_BUCKET_SHORT = 'test1-de41b'  # bucket where stores private key
-PROJECT_SECRET_ID = '175712151730'
-SECRET_NAME = 'secret-key-firebase'
+# PROJECT_SECRET_ID = '175712151730'
+# SECRET_NAME = 'secret-key-firebase'
 logger = logging.getLogger("app.main.gcp")
 
 
