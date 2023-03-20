@@ -62,10 +62,19 @@ def download_blob(source_blob_name: str, destination_file_name: str, bucket_name
     return 0
 
 
-dic = json.loads(access_secret_version(PROJECT_SECRET_ID, SECRET_NAME))
+secret_locations = '/secrets/key_firebase'
+with open(secret_locations) as f:
+    SECRET = f.readlines()
+try:
+    print('SECRET READ ::: ', SECRET)
+except Exception as e:
+    print("ERROR ", e)
+
+
+# dic = json.loads(access_secret_version(PROJECT_SECRET_ID, SECRET_NAME))
 # print(dic)
-cred = credentials.Certificate(dic)
-initialize_app(cred, {'storageBucket': STORAGE_BUCKET_LONG})
+# cred = credentials.Certificate(dic)
+# initialize_app(cred, {'storageBucket': STORAGE_BUCKET_LONG})
 print(f'initialize_app succesfull for {STORAGE_BUCKET_LONG}')
 # upload_blob('cloudbuild.yaml', 'cloudbuild.yaml')
 # download_blob('cloudbuild.yaml', 'cloudbuild_download.yaml')
