@@ -65,10 +65,10 @@ def download_blob(source_blob_name: str, destination_file_name: str, bucket_name
 print('\n\n***************************---------------------*********************************************\n\n')
 secret_locations = '/secrets/key_firebase'
 import glob
-print(glob.glob("/secrets/*"))
+print(glob.glob("/*"))
 # with open(secret_locations) as f:
 #     print(*f)
-print()
+
 
 # dic = json.loads(access_secret_version(PROJECT_SECRET_ID, SECRET_NAME))
 # print(dic)
