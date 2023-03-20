@@ -3,4 +3,4 @@ apiflask
 ffmpeg-python
 google-cloud-storage
 firebase-admin
-google-cloud-secret-manager
+pyyaml
