@@ -65,14 +65,12 @@ def download_blob(source_blob_name: str, destination_file_name: str, bucket_name
 print('\n\n***************************---------------------*********************************************\n\n')
 secret_locations = '/secrets/secret-key-firebase'
 import glob
-print(glob.glob("/*"))
+# print(glob.glob("/*"))
 print(glob.glob("/secrets/*"))
 with open(secret_locations) as f:
-    print(*f)
+    dic = json.loads(f.read())
 
-
-# dic = json.loads(access_secret_version(PROJECT_SECRET_ID, SECRET_NAME))
-# print(dic)
-# cred = credentials.Certificate(dic)
-# initialize_app(cred, {'storageBucket': STORAGE_BUCKET_LONG})
+print(dic)
+cred = credentials.Certificate(dic)
+initialize_app(cred, {'storageBucket': STORAGE_BUCKET_LONG})
 print(f'initialize_app succesfull for {STORAGE_BUCKET_LONG}')
