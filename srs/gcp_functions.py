@@ -1,8 +1,5 @@
 '''
-functions for upload/download to google cloud platform firebase storage. For authentification to access firebase use private key secret-key-firebase
-in secret manager.
-for acces my pc to secret manager:
-gcloud auth application-default login
+functions for upload/download to google cloud platform firebase storage. 
 '''
 from firebase_admin import credentials, initialize_app, storage
 # from google.cloud import secretmanager
@@ -10,10 +7,13 @@ from firebase_admin import credentials, initialize_app, storage
 import json
 import logging
 from pathlib import Path
+import datetime
+
 
 # bucket where stores private key
 STORAGE_BUCKET_LONG = 'test1-de41b.appspot.com'
 STORAGE_BUCKET_SHORT = 'test1-de41b'  # bucket where stores private key
+SECRET_LOCATION = '/secrets/secret-key-firebase'
 # PROJECT_SECRET_ID = '175712151730'
 # SECRET_NAME = 'secret-key-firebase'
 logger = logging.getLogger("app.main.gcp")
@@ -62,15 +62,38 @@ def download_blob(source_blob_name: str, destination_file_name: str, bucket_name
     return 0
 
 
-print('\n\n***************************---------------------*********************************************\n\n')
-secret_locations = '/secrets/secret-key-firebase'
-import glob
-# print(glob.glob("/*"))
-print(glob.glob("/secrets/*"))
-with open(secret_locations) as f:
-    dic = json.loads(f.read())
+def generate_signed_url(blob_name, bucket_name=STORAGE_BUCKET_LONG):
+    # storage_client = storage.Client()
+    bucket = storage.bucket(bucket_name)
+    blob = bucket.blob(blob_name)
 
-print(dic)
-cred = credentials.Certificate(dic)
-initialize_app(cred, {'storageBucket': STORAGE_BUCKET_LONG})
-print(f'initialize_app succesfull for {STORAGE_BUCKET_LONG}')
+    url = blob.generate_signed_url(
+        # This URL is valid for 1 hour
+        expiration=datetime.timedelta(hours=1),
+        # Allow GET requests using this URL.
+        method="GET",
+    )
+
+    # print(f"The signed url for {blob.name} is {url}")
+    return url
+# import glob
+# print(glob.glob("/*"))
+# print(glob.glob("/secrets/*"))
+dic = []
+try:
+    with open(SECRET_LOCATION) as f:
+        dic = json.loads(f.read())
+except IOError as e:
+    print("I/O error({0}): {1}".format(e.errno, e.strerror))
+except:  # handle other exceptions such as attribute errors
+    print("Unexpected error:", sys.exc_info()[0])
+# print(dic)
+if dic:
+    cred = credentials.Certificate(dic)
+    initialize_app(cred, {'storageBucket': STORAGE_BUCKET_LONG})
+    print(f'Initialize_app succesfull for {STORAGE_BUCKET_LONG}')
+else:
+    print(f'Initialize_app ERROR for {STORAGE_BUCKET_LONG}')
+
+# generate_signed_url(STORAGE_BUCKET_LONG,
+#                     'd983c82f8f4f40df8be8c4b2c65d5786ab211214a0fa47c3ba969a1e2522998d81af234d61c643a38ca9df4d7cdb84d4307b7f9ec02b4157aaa06ea94af8f060.mpg')
