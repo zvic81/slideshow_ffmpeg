@@ -6,5 +6,6 @@
 *fix - url for pictures not eque name.ext
 *fix - Dont use swagger for tests, use Postman
 one picture is video too
-redirect to localhost/docs - error on GCP, need https://slide-new-33xyz3qt7a-lz.a.run.app/docs 
+*fix - redirect to localhost/docs - error on GCP, need https://slide-new-33xyz3qt7a-lz.a.run.app/docs 
 need remove and create dir PICS for saving video in route get video. Is it safe?
+app must return url to video firebase, no downloading video

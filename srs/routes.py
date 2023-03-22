@@ -1,13 +1,13 @@
 #  routes for rest api server's endpoints
 
 
-from flask import redirect, send_from_directory
+from flask import redirect
 from werkzeug.exceptions import NotFound
-import os
+# import os
 from pathlib import Path
 from threading import Thread
 import logging
-import shutil
+# import shutil
 import schemas
 from data_storage import Video_Dict, create_video_object
 import gcp_functions
@@ -23,7 +23,7 @@ def configure_routes(app):
         data = {"message": "Hello!"}
         # open swagger index page
         logger.info("server made redirect")
-        return redirect("http://localhost:5000/docs", code=302)
+        return redirect("/docs", code=302)
 
     @app.get("/video")  # NOT WORK!!! peharps need be deleted
     @app.output(schemas.VideoOutSchema(many=False), status_code=200)
@@ -74,31 +74,19 @@ def configure_routes(app):
         import data_storage
         status = Video_Dict.get(video_id, 'UNKNOWN')
         if status != 'READY':
-            logger.error("Video not ready, id = %s", video_id)
+            logger.error("Video not ready or found, id = %s", video_id)
             return {
                 "data": status,
                 "code": 404,
             }, 404
-        # del and create dir PICS
-        shutil.rmtree(Path(str(data_storage.PICS_DIR)))
-        Path(str(data_storage.PICS_DIR)).mkdir(parents=True, exist_ok=True)
-
-        video_url = Path(str(data_storage.PICS_DIR) + '/' + video_id + '.mpg')
-        gcp_functions.download_blob(
-            video_id + '.mpg', video_url)
-        if not video_url.is_file():
-            logger.error("Video not found, id = %s", video_id)
-            return {
-                "data": "VIDEO_NOT_FOUND",
-                "code": 404,
-            }, 404
+        video_url = gcp_functions.generate_signed_url(video_id + '.mpg')
         try:
             logger.info("try to give out video id = %s", video_id)
-            return send_from_directory(data_storage.PICS_DIR, video_id + '.mpg', as_attachment=False)
+            return redirect(video_url, code=302)
         except NotFound:
-            logger.error("File video not found id = %s", video_id)
+            logger.error("URL video not found id = %s", video_id)
         return {
-            "data": 'ERROR_SEND_FILE',
+            "data": 'ERROR_SEND_URL',
             "code": 404,
         }, 404
         pass
