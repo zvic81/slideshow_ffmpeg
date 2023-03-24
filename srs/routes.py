@@ -25,18 +25,6 @@ def configure_routes(app):
         logger.info("server made redirect")
         return redirect("/docs", code=302)
 
-    @app.get("/video")  # NOT WORK!!! peharps need be deleted
-    @app.output(schemas.VideoOutSchema(many=False), status_code=200)
-    def get_list_videos():
-        print(Video_Dict)
-        # if not len(Video_List):  # only for TEST, fill list test data if it empty
-        #     append_test_video()
-        #     append_test_video(status="NEW", video_url="tetetet\tete\te")
-        return {
-            "data": "test",
-            "code": 200,
-        }
-
     @app.post("/video")  # work
     @app.input(schemas.PictureSourceSchema(many=True))
     @app.output(schemas.VideoId, status_code=201)

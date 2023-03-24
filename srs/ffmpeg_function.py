@@ -4,14 +4,7 @@
 # -filter_complex "[0][1]xfade=transition=fade:duration=2:offset=4[vf1]; [vf1][2]xfade=transition=fade:duration=5:offset=8" output.mp4
 # ffmpeg -i logo.png -vf scale=360:640 output_1.png
 
-# https://webmg.ru/wp-content/uploads/2022/10/i-17-15.jpeg
-# https://i.pinimg.com/originals/f3/e9/ee/f3e9eeddfe1cc62853167b7183cc324a.png
-# https://flyclipart.com/thumbs/vector-illustration-of-stratford-upon-avon-tudor-style-stratford-upon-avon-cartoon-1477652.png
-# https://anvizbiometric.ru/wp-content/uploads/8/7/f/87f5629a6808640e69d2a39a127a7ab3.jpeg
-# https://i.ytimg.com/vi/ULEprOna8-g/maxresdefault.jpg
-
 import ffmpeg
-import os
 from pathlib import Path
 from time import sleep
 from threading import Thread
@@ -20,7 +13,7 @@ import shutil  # for delete dir
 
 import gcp_functions
 from entities import VideoSource
-from data_storage import Video_Dict, append_test_video
+from data_storage import Video_Dict
 
 
 BASE_RESOLUTION = (1280, 720)
@@ -59,7 +52,7 @@ def load_and_resize_picture(*, input_url: str, output_dir: str, base_size_x=1280
     pic_y = int((scale * pic_y) + 0.5)
     try:
         logger.info("load_and_resize_picture for %s", input_url)
-        (  # RECOMMENT FOR REAL USING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        (
             ffmpeg.input(input_url)
             .filter("scale", pic_x, pic_y)
             .output(file_out, y="-y")
@@ -195,7 +188,7 @@ def convert_pic_to_video(video_source: VideoSource) -> str:
 # move video from dir to firebase (with deleting original dir)
 def move_video_to_firebase(video_id: str):
     import data_storage
-    
+
     video_url = Path(str(data_storage.PICS_DIR) +
                      '/' + video_id + "/video_out.mpg")
     # Path(str(data_storage.PICS_DIR) + video_id + "/video_out.mpg")
