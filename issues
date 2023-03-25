@@ -15,7 +15,11 @@ what is learning
 - a litle Threading
 - repeat Marshmellow
 - get data from firebase
+- made ci/cd
 - work with secret gcp from python
 - continues developing from github to google run
 - triggers google run
 - mount secret to google run
+- mocking side effect
+
+add cpu and mem,make local downoad pict, resize using imagemagik
