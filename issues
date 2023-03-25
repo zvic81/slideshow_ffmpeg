@@ -7,6 +7,15 @@
 *fix - Dont use swagger for tests, use Postman
 one picture is video too
 *fix - redirect to localhost/docs - error on GCP, need https://slide-new-33xyz3qt7a-lz.a.run.app/docs
-need remove and create dir PICS for saving video in route get video. Is it safe?
-app must return url to video firebase, no downloading video
-testing clone repo
+*fix - need remove and create dir PICS for saving video in route get video. Is it safe?
+*fix - app must return url to video firebase, no downloading video
+what is learning
+- a litle OOP
+- ffmpeg
+- a litle Threading
+- repeat Marshmellow
+- get data from firebase
+- work with secret gcp from python
+- continues developing from github to google run
+- triggers google run
+- mount secret to google run
