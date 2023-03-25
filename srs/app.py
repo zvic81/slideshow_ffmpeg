@@ -12,7 +12,6 @@ import schemas
 import routes
 import data_storage
 
-# import ffmpeg_function dont need
 
 
 app = APIFlask(__name__)
@@ -23,17 +22,6 @@ app.config["BASE_RESPONSE_SCHEMA"] = schemas.BaseResponse
 # the data key should match the data field name in the base response schema
 # defaults to "data"
 app.config["BASE_RESPONSE_DATA_KEY "] = "data"
-
-# logging.basicConfig(
-#     level=logging.INFO,
-#     handlers=[
-#         logging.FileHandler("slideshow_log.log", mode="w"),
-#         logging.StreamHandler(),
-#     ],
-#     # filename="slideshow_log.log",
-#     # filemode="w",
-#     format="%(asctime)s %(levelname)s %(message)s",
-# )
 
 
 def init_logger(name):
@@ -62,33 +50,7 @@ def init_dir():
 if __name__ == "__main__":
     init_logger("app")
     init_dir()
-    # print(data_storage.PICS_DIR)  # /home/vic/python/slideshow_ffmpeg/pics
     logger = logging.getLogger("app.main")
     logger.info("app started!!!")
     app.run(debug=0, host="0.0.0.0")
     pass
-
-
-"""  test data 
-[
-  {
-    "caption": "SuperShow",
-    "duration": 3,
-    "srs": "https://webmg.ru/wp-content/uploads/2022/10/i-17-15.jpeg",
-    "transition": "fade"
-  },
-  {
-    "caption": "SuperShow",
-    "duration": 2,
-    "srs": "https://i.pinimg.com/originals/f3/e9/ee/f3e9eeddfe1cc62853167b7183cc324a.png",
-    "transition": "fade"
-  },  
- {
-    "caption": "SuperShow",
-    "duration": 4,
-    "srs": "https://i.ytimg.com/vi/ULEprOna8-g/maxresdefault.jpg",
-    "transition": "fade"
-  }
-]
-
-"""

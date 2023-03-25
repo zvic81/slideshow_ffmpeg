@@ -10,3 +10,5 @@ pics
 slideshow.postman_collection.json
 issues
 key
+/test
+pytest.ini 
