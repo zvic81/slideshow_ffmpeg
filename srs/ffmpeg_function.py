@@ -156,7 +156,6 @@ def convert_pic_to_video(video_source: VideoSource) -> str:
         previous_pic = curr_pic
         pass
 
-    # file_video = PICS_DIR + "/" + "id111" + "/video_out.mpg" FOR TEST local
     file_video = str(data_storage.PICS_DIR) + '/' + \
         video_source.get_uid() + "/video_out.mpg"
     try:
@@ -191,7 +190,6 @@ def move_video_to_firebase(video_id: str):
 
     video_url = Path(str(data_storage.PICS_DIR) +
                      '/' + video_id + "/video_out.mpg")
-    # Path(str(data_storage.PICS_DIR) + video_id + "/video_out.mpg")
     if not video_url.is_file():
         logger.error(
             "Error in move_video_to_firebase, no video_out.mpg in dir %s", video_id)
@@ -206,28 +204,3 @@ def move_video_to_firebase(video_id: str):
             "Error in move_video_to_firebase, cant del dir %s", video_id)
         return 1
     return 0
-
-
-if __name__ == "__main__":
-    # move_video_to_firebase('')
-
-    pass
-
-
-# (
-#     ffmpeg.input("pics/logo.png")
-#     .filter("scale", 360, 640)
-#     .output("pics/output_1.png", y="-y")
-#     .run()
-# )
-# stream = ffmpeg.input("pics/output_1.png", t=5, loop=1)
-# stream2 = ffmpeg.input("pics/050.png", t=5, loop=1)
-# faded = ffmpeg.filter(
-#     (stream, stream2), "xfade", transition="fade", duration=3, offset=2
-# )
-# stream2 = ffmpeg.input("pics/020.png", t=5, loop=1)
-# faded = ffmpeg.filter(
-#     (faded, stream2), "xfade", transition="fade", duration=5, offset=4
-# )
-# out = ffmpeg.output(faded, "pics/out444.mpg", y="-y")
-# ffmpeg.run(out)
